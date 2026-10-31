@@ -1,0 +1,17 @@
+<div class="announcement" role="region" aria-label="Announcement">
+  <p class="announcement__text">{{ section.settings.text }}</p>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Доставка по РФ · 5–14 рабочих дней"
+    }
+  ]
+}
+{% endschema %}

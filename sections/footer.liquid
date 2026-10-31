@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <div class="site-footer__grid">
+    <div>
+      <p class="site-footer__brand">{{ shop.name | upcase }}</p>
+      <p class="muted">Светящиеся чехлы для AirPods и iPhone. Сделано, чтобы светиться.</p>
+    </div>
+    <div>
+      <p class="site-footer__title">Покупателям</p>
+      <a href="/policies/shipping-policy">Доставка</a>
+      <a href="/policies/refund-policy">Возврат</a>
+      <a href="/policies/privacy-policy">Конфиденциальность</a>
+    </div>
+    <div>
+      <p class="site-footer__title">Контакты</p>
+      {% if shop.email %}<a href="mailto:{{ shop.email }}">{{ shop.email }}</a>{% endif %}
+    </div>
+  </div>
+  <p class="site-footer__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}

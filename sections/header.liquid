@@ -1,0 +1,22 @@
+<header class="site-header">
+  <div class="site-header__inner">
+    <nav class="site-header__nav" aria-label="Main">
+      <a href="{{ routes.collections_url }}">Каталог</a>
+      <a href="{{ routes.all_products_collection_url }}">Все товары</a>
+    </nav>
+    <a class="site-header__logo" href="{{ routes.root_url }}">{{ shop.name | upcase }}</a>
+    <div class="site-header__actions">
+      <a href="{{ routes.cart_url }}" class="site-header__cart">
+        Корзина
+        {% if cart.item_count > 0 %}<span class="badge">{{ cart.item_count }}</span>{% endif %}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}
