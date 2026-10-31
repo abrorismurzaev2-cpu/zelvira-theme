@@ -1,0 +1,44 @@
+<section class="collection-page">
+  <header class="section-head">
+    <h1 class="section-title">{{ collection.title | default: 'Каталог' }}</h1>
+    {% if collection.description != blank %}
+      <div class="muted">{{ collection.description }}</div>
+    {% endif %}
+  </header>
+  <div class="product-grid">
+    {% for product in collection.products %}
+      <a class="product-card" href="{{ product.url }}">
+        <div class="product-card__media">
+          {% if product.featured_media %}
+            <img src="{{ product.featured_media | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="400">
+          {% else %}
+            <div class="product-card__placeholder">GLOW</div>
+          {% endif %}
+        </div>
+        <h2 class="product-card__title">{{ product.title }}</h2>
+        <p class="product-card__price">{{ product.price | money }}</p>
+      </a>
+    {% else %}
+      {% for product in collections.all.products %}
+        <a class="product-card" href="{{ product.url }}">
+          <div class="product-card__media">
+            {% if product.featured_media %}
+              <img src="{{ product.featured_media | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="400">
+            {% else %}
+              <div class="product-card__placeholder">GLOW</div>
+            {% endif %}
+          </div>
+          <h2 class="product-card__title">{{ product.title }}</h2>
+          <p class="product-card__price">{{ product.price | money }}</p>
+        </a>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": []
+}
+{% endschema %}

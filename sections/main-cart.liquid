@@ -1,0 +1,33 @@
+<section class="cart-page">
+  <h1 class="section-title">Корзина</h1>
+  {% if cart.item_count == 0 %}
+    <p class="muted">Корзина пуста.</p>
+    <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">К каталогу</a>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post" class="cart-form">
+      {% for item in cart.items %}
+        <div class="cart-line">
+          {% if item.image %}
+            <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}" width="80" height="80">
+          {% endif %}
+          <div class="cart-line__info">
+            <a href="{{ item.url }}">{{ item.product.title }}</a>
+            <p class="muted">{{ item.variant.title }} · ×{{ item.quantity }}</p>
+            <p>{{ item.final_line_price | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="cart-footer">
+        <p class="cart-total">Итого: <strong>{{ cart.total_price | money }}</strong></p>
+        <button type="submit" name="checkout" class="btn btn--primary btn--full">Оформить заказ</button>
+      </div>
+    </form>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}
