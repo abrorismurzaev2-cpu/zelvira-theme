@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "hero",
+      "settings": {
+        "heading": "404",
+        "subheading": "Страница не найдена",
+        "button_label": "На главную",
+        "button_link": "/"
+      }
+    }
+  },
+  "order": ["main"]
+}

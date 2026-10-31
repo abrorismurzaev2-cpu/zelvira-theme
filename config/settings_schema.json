@@ -1,0 +1,19 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Zelvira",
+    "theme_version": "1.0.0",
+    "theme_author": "Zelvira",
+    "theme_documentation_url": "https://github.com/abrorismurzaev2-cpu/zelvira-theme",
+    "theme_support_url": "https://github.com/abrorismurzaev2-cpu/zelvira-theme"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "color", "id": "color_bg", "label": "Background", "default": "#050505" },
+      { "type": "color", "id": "color_text", "label": "Text", "default": "#F5F5F5" },
+      { "type": "color", "id": "color_accent", "label": "Accent", "default": "#A3FF12" },
+      { "type": "color", "id": "color_muted", "label": "Muted", "default": "#8A8A8A" }
+    ]
+  }
+]

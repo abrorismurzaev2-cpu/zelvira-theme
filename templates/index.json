@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "MAKE THEM GLOW",
+        "subheading": "Светящиеся чехлы для AirPods и iPhone. Днём — стиль. Ночью — свечение.",
+        "button_label": "Смотреть коллекцию",
+        "button_link": "/collections/all"
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Выбери свой glow",
+        "products_to_show": 8
+      }
+    },
+    "usp": {
+      "type": "usp-bar",
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "featured", "usp", "faq"]
+}
