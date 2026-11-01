@@ -11,7 +11,8 @@
       }
     },
     "usp": { "type": "usp-bar", "settings": {} },
-    "faq": { "type": "faq", "settings": {} }
+    "faq": { "type": "faq", "settings": {} },
+    "legal": { "type": "legal-block", "settings": {} }
   },
-  "order": ["home", "usp", "faq"]
+  "order": ["home", "usp", "faq", "legal"]
 }
