@@ -3,39 +3,35 @@
     <h2 class="section-title">{{ section.settings.title }}</h2>
   </div>
   <div class="product-grid">
-    {% assign shown = 0 %}
-    {% for product in collections.all.products %}
-      {% if shown >= section.settings.products_to_show %}{% break %}{% endif %}
-      {% if product.tags contains 'glow' or product.type contains 'Чехлы' or product.type contains 'чехол' %}
-        <a class="product-card" href="{{ product.url }}">
-          <div class="product-card__media">
-            {% if product.featured_media %}
-              <img src="{{ product.featured_media | image_url: width: 800 }}" alt="{{ product.featured_media.alt | escape }}" loading="lazy" width="400" height="400">
-            {% else %}
-              <div class="product-card__placeholder">GLOW</div>
-            {% endif %}
-          </div>
-          <h3 class="product-card__title">{{ product.title }}</h3>
-          <p class="product-card__price">{{ product.price | money }}</p>
-        </a>
-        {% assign shown = shown | plus: 1 %}
-      {% endif %}
-    {% endfor %}
-    {% if shown == 0 %}
-      {% for product in collections.all.products limit: section.settings.products_to_show %}
-        <a class="product-card" href="{{ product.url }}">
-          <div class="product-card__media">
-            {% if product.featured_media %}
-              <img src="{{ product.featured_media | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="400">
-            {% else %}
-              <div class="product-card__placeholder">GLOW</div>
-            {% endif %}
-          </div>
-          <h3 class="product-card__title">{{ product.title }}</h3>
-          <p class="product-card__price">{{ product.price | money }}</p>
-        </a>
-      {% endfor %}
+    {% assign col = collections[section.settings.collection] %}
+    {% if col == blank %}
+      {% assign col = collections.frontpage %}
     {% endif %}
+    {% if col == blank or col.products_count == 0 %}
+      {% assign col = collections.all %}
+    {% endif %}
+
+    {% for product in col.products limit: section.settings.products_to_show %}
+      <a class="product-card" href="{{ product.url }}">
+        <div class="product-card__media">
+          {% if product.featured_media %}
+            <img
+              src="{{ product.featured_media | image_url: width: 800 }}"
+              alt="{{ product.title | escape }}"
+              loading="lazy"
+              width="400"
+              height="400"
+            >
+          {% else %}
+            <div class="product-card__placeholder">GLOW</div>
+          {% endif %}
+        </div>
+        <h3 class="product-card__title">{{ product.title }}</h3>
+        <p class="product-card__price">{{ product.price | money }}</p>
+      </a>
+    {% else %}
+      <p class="muted">Товары скоро появятся.</p>
+    {% endfor %}
   </div>
   <div class="featured__cta">
     <a class="btn btn--ghost" href="{{ routes.all_products_collection_url }}">Все товары</a>
@@ -47,7 +43,8 @@
   "name": "Featured collection",
   "settings": [
     { "type": "text", "id": "title", "label": "Title", "default": "Выбери свой glow" },
-    { "type": "range", "id": "products_to_show", "min": 4, "max": 12, "step": 1, "default": 8, "label": "Products to show" }
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 1, "max": 12, "step": 1, "default": 8, "label": "Products to show" }
   ],
   "presets": [{ "name": "Featured collection" }]
 }
