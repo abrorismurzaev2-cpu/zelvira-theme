@@ -3,12 +3,15 @@
     <div>
       <p class="site-footer__brand">{{ shop.name | upcase }}</p>
       <p class="muted">Светящиеся чехлы для AirPods. Днём — стиль. Ночью — свечение.</p>
+      <p class="muted" style="margin-top:10px;font-size:12px">ИП / самозанятый: Ишмурзаев А. А.<br>ИНН 680905736940</p>
     </div>
     <div>
       <p class="site-footer__title">Покупателям</p>
-      <a href="/policies/shipping-policy">Доставка</a>
-      <a href="/policies/refund-policy">Возврат</a>
-      <a href="/policies/privacy-policy">Конфиденциальность</a>
+      <a href="/pages/requisites">Реквизиты</a>
+      <a href="/pages/offer">Публичная оферта</a>
+      <a href="/pages/privacy">Конфиденциальность</a>
+      <a href="/pages/oplata-yookassa">Оплата ЮKassa</a>
+      <a href="/pages/contact">Контакты</a>
     </div>
     <div>
       <p class="site-footer__title">Контакты</p>
@@ -16,7 +19,7 @@
       {% if shop.email %}<a href="mailto:{{ shop.email }}">{{ shop.email }}</a>{% endif %}
     </div>
   </div>
-  <p class="site-footer__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Вопросы — <a href="https://t.me/Abror0_0" target="_blank" rel="noopener">@Abror0_0</a></p>
+  <p class="site-footer__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. ИНН 680905736940 · Вопросы — <a href="https://t.me/Abror0_0" target="_blank" rel="noopener">@Abror0_0</a></p>
 </footer>
 
 {% schema %}
