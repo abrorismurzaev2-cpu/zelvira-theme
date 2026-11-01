@@ -1,0 +1,23 @@
+{
+  "general": {
+    "password_page": {
+      "login_form_password_label": "Пароль",
+      "login_form_password_placeholder": "Пароль",
+      "login_form_submit": "Войти",
+      "login_form_error": "Неверный пароль",
+      "login_form_heading": "Магазин закрыт паролем"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "В корзину",
+      "sold_out": "Нет в наличии",
+      "price": "Цена"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "Товары не найдены"
+    }
+  }
+}
