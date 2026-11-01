@@ -1,27 +1,105 @@
 <section class="cart-page">
   <h1 class="section-title">Корзина</h1>
+
   {% if cart.item_count == 0 %}
-    <p class="muted">Корзина пуста.</p>
-    <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">К каталогу</a>
+    <div class="cart-empty">
+      <p class="cart-empty__title">Корзина пуста</p>
+      <p class="muted">Добавьте чехол — и он появится здесь.</p>
+      <a class="btn btn--primary" href="{{ routes.root_url }}">К товару</a>
+    </div>
   {% else %}
-    <form action="{{ routes.cart_url }}" method="post" class="cart-form">
-      {% for item in cart.items %}
-        <div class="cart-line">
-          {% if item.image %}
-            <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}" width="80" height="80">
-          {% endif %}
-          <div class="cart-line__info">
-            <a href="{{ item.url }}">{{ item.product.title }}</a>
-            <p class="muted">{{ item.variant.title }} · ×{{ item.quantity }}</p>
-            <p>{{ item.final_line_price | money }}</p>
-          </div>
-        </div>
-      {% endfor %}
-      <div class="cart-footer">
-        <p class="cart-total">Итого: <strong>{{ cart.total_price | money }}</strong></p>
-        <button type="submit" name="checkout" class="btn btn--primary btn--full">Оформить заказ</button>
+    <form action="{{ routes.cart_url }}" method="post" id="CartForm" class="cart-layout">
+      <div class="cart-list">
+        {% for item in cart.items %}
+          <article class="cart-item" data-key="{{ item.key }}">
+            <a class="cart-item__img" href="{{ item.url }}">
+              {% if item.image %}
+                <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title | escape }}" width="96" height="96" loading="lazy">
+              {% else %}
+                <div class="cart-item__ph">GLOW</div>
+              {% endif %}
+            </a>
+
+            <div class="cart-item__body">
+              <div class="cart-item__top">
+                <div>
+                  <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+                  {% unless item.product.has_only_default_variant %}
+                    <p class="cart-item__variant">{{ item.variant.title }}</p>
+                  {% endunless %}
+                </div>
+                <a
+                  class="cart-item__remove"
+                  href="{{ item.url_to_remove }}"
+                  aria-label="Удалить"
+                  title="Удалить"
+                >Удалить</a>
+              </div>
+
+              <div class="cart-item__bottom">
+                <div class="qty">
+                  <label class="visually-hidden" for="updates_{{ item.key }}">Количество</label>
+                  <button type="button" class="qty__btn" data-qty="-" data-key="{{ item.key }}" aria-label="Меньше">−</button>
+                  <input
+                    id="updates_{{ item.key }}"
+                    class="qty__input"
+                    type="number"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    data-key="{{ item.key }}"
+                  >
+                  <button type="button" class="qty__btn" data-qty="+" data-key="{{ item.key }}" aria-label="Больше">+</button>
+                </div>
+                <p class="cart-item__price">{{ item.final_line_price | money_without_currency | strip }} ₽</p>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
       </div>
+
+      <aside class="cart-summary">
+        <h2 class="cart-summary__title">Итого</h2>
+        <div class="cart-summary__row">
+          <span>Товары ({{ cart.item_count }})</span>
+          <span>{{ cart.total_price | money_without_currency | strip }} ₽</span>
+        </div>
+        <div class="cart-summary__row cart-summary__row--muted">
+          <span>Доставка</span>
+          <span>при оформлении</span>
+        </div>
+        <div class="cart-summary__total">
+          <span>К оплате</span>
+          <strong>{{ cart.total_price | money_without_currency | strip }} ₽</strong>
+        </div>
+
+        <button type="submit" name="update" class="btn btn--ghost btn--full cart-update-btn">Обновить корзину</button>
+        <button type="submit" name="checkout" class="btn btn--primary btn--full">Перейти к оплате</button>
+
+        <p class="cart-summary__note">Оплата сразу онлайн · ЮKassa · МИР / СБП</p>
+        <p class="cart-summary__note">Телефон на checkout обязателен для доставки</p>
+      </aside>
     </form>
+
+    <script>
+    (function () {
+      var form = document.getElementById('CartForm');
+      if (!form) return;
+      form.querySelectorAll('.qty__btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var key = btn.getAttribute('data-key');
+          var input = form.querySelector('.qty__input[data-key="' + key + '"]');
+          if (!input) return;
+          var n = parseInt(input.value, 10) || 0;
+          if (btn.getAttribute('data-qty') === '+') n += 1;
+          else n = Math.max(0, n - 1);
+          input.value = n;
+          // 0 = remove like Ozon/WB
+          form.querySelector('button[name="update"]').click();
+        });
+      });
+    })();
+    </script>
   {% endif %}
 </section>
 
