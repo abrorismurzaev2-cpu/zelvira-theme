@@ -3,6 +3,34 @@
     "color_bg": "#050505",
     "color_text": "#F5F5F5",
     "color_accent": "#A3FF12",
-    "color_muted": "#8A8A8A"
+    "color_muted": "#8A8A8A",
+    "sections": {
+      "header-group": {
+        "type": "header",
+        "sections": {
+          "announcement": {
+            "type": "announcement-bar",
+            "settings": {
+              "text": "Доставка по РФ · 5–14 рабочих дней · Glow-чехлы для AirPods"
+            }
+          },
+          "header": {
+            "type": "header",
+            "settings": {}
+          }
+        },
+        "order": ["announcement", "header"]
+      },
+      "footer-group": {
+        "type": "footer",
+        "sections": {
+          "footer": {
+            "type": "footer",
+            "settings": {}
+          }
+        },
+        "order": ["footer"]
+      }
+    }
   }
 }
