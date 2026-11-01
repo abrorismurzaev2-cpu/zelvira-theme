@@ -1,0 +1,26 @@
+<section class="collection-page">
+  <header class="section-head"><h1 class="section-title">Каталог</h1></header>
+  <div class="product-grid">
+    {% for collection in collections %}
+      {% if collection.products_count > 0 %}
+        <a class="product-card" href="{{ collection.url }}">
+          <div class="product-card__media">
+            {% if collection.featured_image %}
+              <img src="{{ collection.featured_image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" loading="lazy" width="400" height="400">
+            {% elsif collection.products.first.featured_image %}
+              <img src="{{ collection.products.first.featured_image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" loading="lazy" width="400" height="400">
+            {% else %}
+              <div class="product-card__placeholder">GLOW</div>
+            {% endif %}
+          </div>
+          <h2 class="product-card__title">{{ collection.title }}</h2>
+          <p class="product-card__price">{{ collection.products_count }} тов.</p>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div style="text-align:center;margin-top:28px">
+    <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">Все товары</a>
+  </div>
+</section>
+{% schema %}{"name": "List collections", "settings": []}{% endschema %}

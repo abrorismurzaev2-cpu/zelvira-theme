@@ -1,13 +1,7 @@
 {
   "sections": {
-    "main": {
-      "type": "main-product",
-      "settings": {}
-    },
-    "faq": {
-      "type": "faq",
-      "settings": {}
-    }
+    "main": { "type": "main-product", "settings": {} },
+    "faq": { "type": "faq", "settings": {} }
   },
   "order": ["main", "faq"]
 }
