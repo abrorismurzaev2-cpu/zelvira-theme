@@ -3,17 +3,23 @@
   <div class="product-page__grid">
     <div class="product-page__gallery">
       <div class="product-page__main-media">
-        {% if product.featured_media %}
-          <img id="ProductMainImage" src="{{ product.featured_media | image_url: width: 1200 }}" alt="{{ product.title | escape }}" width="800" height="800">
+        {% if product.featured_image %}
+          <img
+            id="ProductMainImage"
+            src="{{ product.featured_image | image_url: width: 1200 }}"
+            alt="{{ product.title | escape }}"
+            width="800"
+            height="800"
+          >
         {% else %}
           <div class="product-card__placeholder product-card__placeholder--lg">GLOW</div>
         {% endif %}
       </div>
-      {% if product.media.size > 1 %}
+      {% if product.images.size > 1 %}
         <div class="product-page__thumbs">
-          {% for media in product.media %}
-            <button type="button" class="thumb{% if forloop.first %} is-active{% endif %}" data-src="{{ media | image_url: width: 1200 }}">
-              <img src="{{ media | image_url: width: 160 }}" alt="" loading="lazy" width="72" height="72">
+          {% for image in product.images %}
+            <button type="button" class="thumb{% if forloop.first %} is-active{% endif %}" data-src="{{ image | image_url: width: 1200 }}">
+              <img src="{{ image | image_url: width: 160 }}" alt="" loading="lazy" width="72" height="72">
             </button>
           {% endfor %}
         </div>
@@ -23,7 +29,13 @@
     <div class="product-page__info">
       <p class="product-page__eyebrow">Glow Case · Zelvira</p>
       <h1 class="product-page__title">{{ product.title }}</h1>
-      <div class="product-page__price" id="ProductPrice">{{ v.price | money }}</div>
+
+      <div class="product-page__price" id="ProductPrice">
+        {% if v.compare_at_price > v.price %}
+          <span class="price-compare">{{ v.compare_at_price | money }}</span>
+        {% endif %}
+        <span class="price-current">{{ v.price | money }}</span>
+      </div>
 
       {% unless product.has_only_default_variant %}
         <div class="product-page__variants">
@@ -39,6 +51,8 @@
       {% endunless %}
 
       <form method="post" action="/cart/add" id="ProductForm" accept-charset="UTF-8">
+        <input type="hidden" name="form_type" value="product">
+        <input type="hidden" name="utf8" value="✓">
         <input type="hidden" name="id" id="ProductVariantId" value="{{ v.id }}">
         <button type="submit" class="btn btn--primary btn--full" {% unless v.available %}disabled{% endunless %}>
           {% if v.available %}Купить · {{ v.price | money }}{% else %}Нет в наличии{% endif %}
