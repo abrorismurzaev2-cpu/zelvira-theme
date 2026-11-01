@@ -51,12 +51,7 @@
             <p class="label">{{ option.name }}</p>
             <div class="option-list" data-option-index="{{ forloop.index0 }}">
               {% for value in option.values %}
-                <button
-                  type="button"
-                  class="option-pill{% if option.selected_value == value %} is-active{% endif %}"
-                  data-option-index="{{ forloop.parentloop.index0 }}"
-                  data-value="{{ value | escape }}"
-                >{{ value }}</button>
+                <button type="button" class="option-pill{% if option.selected_value == value %} is-active{% endif %}" data-option-index="{{ forloop.parentloop.index0 }}" data-value="{{ value | escape }}">{{ value }}</button>
               {% endfor %}
             </div>
           {% endfor %}
@@ -81,8 +76,8 @@
       {% endif %}
 
       <ul class="sph-trust">
-        <li>✓ Доставка по РФ 5–14 дней</li>
-        <li>✓ Оплата при получении / онлайн</li>
+        <li>✓ Доставка по РФ 3–14 дней</li>
+        <li>✓ Оплата сразу онлайн (ЮKassa)</li>
         <li>✓ {{ section.settings.guarantee }}</li>
       </ul>
 
@@ -152,32 +147,26 @@
   if (!jsonEl) return;
   var variants = [];
   try { variants = JSON.parse(jsonEl.textContent); } catch (e) { return; }
-
   function formatRub(cents) {
-    // Shopify money JSON is in shop currency units * 100 for some shops; for RUB often already major units as number
     var n = Number(cents);
     if (!isFinite(n)) return '';
-    // If value looks like minor units (>= 10000 for ~100 RUB), divide
     if (n >= 10000 && n % 100 === 0) n = n / 100;
     return Math.round(n).toLocaleString('ru-RU') + ' ₽';
   }
-
   function selectedOptions() {
     var opts = [];
-    document.querySelectorAll('.option-list').forEach(function (list, idx) {
+    document.querySelectorAll('.option-list').forEach(function (list) {
       var active = list.querySelector('.option-pill.is-active');
-      opts[idx] = active ? active.getAttribute('data-value') : null;
+      opts.push(active ? active.getAttribute('data-value') : null);
     });
     return opts;
   }
-
   function findVariant(opts) {
     return variants.find(function (v) {
       if (!v.options) return false;
       return v.options.every(function (o, i) { return String(o) === String(opts[i]); });
     });
   }
-
   function applyVariant(v) {
     if (!v) return;
     var idEl = document.getElementById('SphVariantId');
@@ -202,7 +191,6 @@
       }
     }
   }
-
   document.querySelectorAll('.option-pill').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var list = btn.closest('.option-list');
@@ -211,7 +199,6 @@
       applyVariant(findVariant(selectedOptions()));
     });
   });
-
   document.querySelectorAll('.sph-thumbs .thumb').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var src = btn.getAttribute('data-src');
@@ -231,7 +218,7 @@
     { "type": "product", "id": "product", "label": "Product" },
     { "type": "text", "id": "badge", "label": "Badge", "default": "ХИТ · Светится в темноте" },
     { "type": "text", "id": "urgency", "label": "Urgency bar", "default": "🔥 Осталось мало по этой цене · отправка сегодня" },
-    { "type": "text", "id": "guarantee", "label": "Guarantee", "default": "14 дней на обмен/возврат" },
+    { "type": "text", "id": "guarantee", "label": "Guarantee", "default": "3 дня на возврат" },
     { "type": "text", "id": "reviews_title", "label": "Reviews title", "default": "Что говорят покупатели" },
     { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Светящийся чехол для AirPods" }
   ],
