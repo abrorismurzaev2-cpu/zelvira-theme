@@ -75,7 +75,8 @@
       {% endif %}
 
       <ul class="sph-trust">
-        <li>✓ Доставка по РФ 3–14 дней</li>
+        <li>✓ <strong>Бесплатная доставка</strong> по РФ для покупателя</li>
+        <li>✓ Срок 3–14 дней после отправки</li>
         <li>✓ Оплата сразу онлайн (ЮKassa)</li>
         <li>✓ {{ section.settings.guarantee }}</li>
       </ul>
@@ -202,7 +203,6 @@
       btn.classList.add('is-active');
     });
   });
-  // force enable on load
   applyVariant(findVariant(selectedOptions()) || variants[0]);
 })();
 </script>

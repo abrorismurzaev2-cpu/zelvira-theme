@@ -28,27 +28,14 @@
                     <p class="cart-item__variant">{{ item.variant.title }}</p>
                   {% endunless %}
                 </div>
-                <a
-                  class="cart-item__remove"
-                  href="{{ item.url_to_remove }}"
-                  aria-label="Удалить"
-                  title="Удалить"
-                >Удалить</a>
+                <a class="cart-item__remove" href="{{ item.url_to_remove }}" aria-label="Удалить" title="Удалить">Удалить</a>
               </div>
 
               <div class="cart-item__bottom">
                 <div class="qty">
                   <label class="visually-hidden" for="updates_{{ item.key }}">Количество</label>
                   <button type="button" class="qty__btn" data-qty="-" data-key="{{ item.key }}" aria-label="Меньше">−</button>
-                  <input
-                    id="updates_{{ item.key }}"
-                    class="qty__input"
-                    type="number"
-                    name="updates[]"
-                    value="{{ item.quantity }}"
-                    min="0"
-                    data-key="{{ item.key }}"
-                  >
+                  <input id="updates_{{ item.key }}" class="qty__input" type="number" name="updates[]" value="{{ item.quantity }}" min="0" data-key="{{ item.key }}">
                   <button type="button" class="qty__btn" data-qty="+" data-key="{{ item.key }}" aria-label="Больше">+</button>
                 </div>
                 <p class="cart-item__price">{{ item.final_line_price | money_without_currency | strip }} ₽</p>
@@ -64,9 +51,9 @@
           <span>Товары ({{ cart.item_count }})</span>
           <span>{{ cart.total_price | money_without_currency | strip }} ₽</span>
         </div>
-        <div class="cart-summary__row cart-summary__row--muted">
+        <div class="cart-summary__row">
           <span>Доставка</span>
-          <span>при оформлении</span>
+          <span style="color: var(--accent); font-weight: 700;">Бесплатно</span>
         </div>
         <div class="cart-summary__total">
           <span>К оплате</span>
@@ -76,8 +63,8 @@
         <button type="submit" name="update" class="btn btn--ghost btn--full cart-update-btn">Обновить корзину</button>
         <button type="submit" name="checkout" class="btn btn--primary btn--full">Перейти к оплате</button>
 
+        <p class="cart-summary__note">Для покупателя доставка по РФ — бесплатно</p>
         <p class="cart-summary__note">Оплата сразу онлайн · ЮKassa · МИР / СБП</p>
-        <p class="cart-summary__note">Телефон на checkout обязателен для доставки</p>
       </aside>
     </form>
 
@@ -94,7 +81,6 @@
           if (btn.getAttribute('data-qty') === '+') n += 1;
           else n = Math.max(0, n - 1);
           input.value = n;
-          // 0 = remove like Ozon/WB
           form.querySelector('button[name="update"]').click();
         });
       });
