@@ -14,9 +14,9 @@
     {% for product in col.products limit: section.settings.products_to_show %}
       <a class="product-card" href="{{ product.url }}">
         <div class="product-card__media">
-          {% if product.featured_media %}
+          {% if product.featured_image %}
             <img
-              src="{{ product.featured_media | image_url: width: 800 }}"
+              src="{{ product.featured_image | image_url: width: 800 }}"
               alt="{{ product.title | escape }}"
               loading="lazy"
               width="400"
