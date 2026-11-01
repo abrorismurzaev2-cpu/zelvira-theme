@@ -2,7 +2,7 @@
   <div class="site-footer__grid">
     <div>
       <p class="site-footer__brand">{{ shop.name | upcase }}</p>
-      <p class="muted">Светящиеся чехлы для AirPods и iPhone. Сделано, чтобы светиться.</p>
+      <p class="muted">Светящиеся чехлы для AirPods. Днём — стиль. Ночью — свечение.</p>
     </div>
     <div>
       <p class="site-footer__title">Покупателям</p>
@@ -12,10 +12,11 @@
     </div>
     <div>
       <p class="site-footer__title">Контакты</p>
+      <a href="https://t.me/Abror0_0" target="_blank" rel="noopener">Telegram @Abror0_0</a>
       {% if shop.email %}<a href="mailto:{{ shop.email }}">{{ shop.email }}</a>{% endif %}
     </div>
   </div>
-  <p class="site-footer__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+  <p class="site-footer__copy">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Вопросы — <a href="https://t.me/Abror0_0" target="_blank" rel="noopener">@Abror0_0</a></p>
 </footer>
 
 {% schema %}

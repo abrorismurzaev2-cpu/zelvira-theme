@@ -4,13 +4,7 @@
     <div class="product-page__gallery">
       <div class="product-page__main-media">
         {% if product.featured_image %}
-          <img
-            id="ProductMainImage"
-            src="{{ product.featured_image | image_url: width: 1200 }}"
-            alt="{{ product.title | escape }}"
-            width="800"
-            height="800"
-          >
+          <img id="ProductMainImage" src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}" width="800" height="800">
         {% else %}
           <div class="product-card__placeholder product-card__placeholder--lg">GLOW</div>
         {% endif %}
@@ -29,12 +23,11 @@
     <div class="product-page__info">
       <p class="product-page__eyebrow">Glow Case · Zelvira</p>
       <h1 class="product-page__title">{{ product.title }}</h1>
-
       <div class="product-page__price" id="ProductPrice">
         {% if v.compare_at_price > v.price %}
-          <span class="price-compare">{{ v.compare_at_price | money }}</span>
+          <span class="price-compare">{{ v.compare_at_price | money_without_currency | strip }} ₽</span>
         {% endif %}
-        <span class="price-current">{{ v.price | money }}</span>
+        <span class="price-current">{{ v.price | money_without_currency | strip }} ₽</span>
       </div>
 
       {% unless product.has_only_default_variant %}
@@ -54,8 +47,8 @@
         <input type="hidden" name="form_type" value="product">
         <input type="hidden" name="utf8" value="✓">
         <input type="hidden" name="id" id="ProductVariantId" value="{{ v.id }}">
-        <button type="submit" class="btn btn--primary btn--full" {% unless v.available %}disabled{% endunless %}>
-          {% if v.available %}Купить · {{ v.price | money }}{% else %}Нет в наличии{% endif %}
+        <button type="submit" class="btn btn--primary btn--full" id="ProductBuyBtn" {% unless v.available %}disabled{% endunless %}>
+          {% if v.available %}Купить · <span id="ProductBtnPrice">{{ v.price | money_without_currency | strip }} ₽</span>{% else %}Нет в наличии{% endif %}
         </button>
       </form>
 
@@ -63,6 +56,7 @@
         <li>Светится после зарядки светом</li>
         <li>Защита от царапин и ударов</li>
         <li>Доставка по РФ 5–14 рабочих дней</li>
+        <li>Вопросы: <a href="https://t.me/Abror0_0" target="_blank" rel="noopener">Telegram @Abror0_0</a></li>
       </ul>
 
       {% if product.description != blank %}
@@ -72,8 +66,31 @@
   </div>
 </section>
 
-<script type="application/json" id="ProductVariantsJson">
-  {{ product.variants | json }}
+<script type="application/json" id="ProductVariantsJson">{{ product.variants | json }}</script>
+<script>
+(function(){
+  var el=document.getElementById('ProductVariantsJson'); if(!el) return;
+  var variants=[]; try{variants=JSON.parse(el.textContent)}catch(e){return}
+  function rub(n){n=Number(n); if(n>=10000 && n%100===0)n=n/100; return Math.round(n).toLocaleString('ru-RU')+' ₽'}
+  function opts(){var o=[]; document.querySelectorAll('.product-page__variants .option-list').forEach(function(list){var a=list.querySelector('.option-pill.is-active'); o.push(a?a.getAttribute('data-value'):null)}); return o}
+  function find(o){return variants.find(function(v){return v.options && v.options.every(function(x,i){return String(x)===String(o[i])})})}
+  function apply(v){ if(!v) return; var id=document.getElementById('ProductVariantId'); var price=document.getElementById('ProductBtnPrice'); var main=document.querySelector('.price-current'); if(id)id.value=v.id; var t=rub(v.price); if(price)price.textContent=t; if(main)main.textContent=t; }
+  document.querySelectorAll('.product-page__variants .option-pill').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var list=btn.closest('.option-list');
+      list.querySelectorAll('.option-pill').forEach(function(b){b.classList.remove('is-active')});
+      btn.classList.add('is-active');
+      apply(find(opts()));
+    });
+  });
+  document.querySelectorAll('.product-page__thumbs .thumb').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var m=document.getElementById('ProductMainImage'); if(m) m.src=btn.getAttribute('data-src');
+      btn.parentNode.querySelectorAll('.thumb').forEach(function(t){t.classList.remove('is-active')});
+      btn.classList.add('is-active');
+    });
+  });
+})();
 </script>
 
 {% schema %}
