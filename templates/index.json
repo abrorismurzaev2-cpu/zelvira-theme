@@ -1,20 +1,13 @@
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "home": {
+      "type": "single-product-home",
       "settings": {
-        "heading": "MAKE THEM GLOW",
-        "subheading": "Светящиеся чехлы для AirPods. Днём — стиль. Ночью — свечение.",
-        "button_label": "Смотреть товар",
-        "button_link": "/products/svetyashchiysya-chekhol-dlya-airpods-glow-case"
-      }
-    },
-    "featured": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Выбери свой glow",
-        "collection": "frontpage",
-        "products_to_show": 8
+        "badge": "ХИТ · Светится в темноте",
+        "urgency": "🔥 Осталось мало по этой цене · отправка сегодня",
+        "guarantee": "14 дней на обмен/возврат",
+        "reviews_title": "Что говорят покупатели",
+        "fallback_title": "Светящийся чехол для AirPods | Glow Case"
       }
     },
     "usp": {
@@ -26,5 +19,5 @@
       "settings": {}
     }
   },
-  "order": ["hero", "featured", "usp", "faq"]
+  "order": ["home", "usp", "faq"]
 }

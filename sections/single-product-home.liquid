@@ -1,0 +1,159 @@
+{% comment %}
+  One-product store homepage — max conversion focus
+{% endcomment %}
+{% assign p = all_products[section.settings.product] %}
+{% if p == blank %}
+  {% assign p = collections.frontpage.products.first %}
+{% endif %}
+{% if p == blank %}
+  {% assign p = collections.all.products.first %}
+{% endif %}
+{% assign v = p.selected_or_first_available_variant %}
+
+<section class="sph">
+  {% if section.settings.urgency != blank %}
+    <div class="sph-urgency">{{ section.settings.urgency }}</div>
+  {% endif %}
+
+  <div class="sph-grid">
+    <div class="sph-gallery">
+      <div class="sph-main">
+        {% if p.featured_image %}
+          <img id="SphMain" src="{{ p.featured_image | image_url: width: 1200 }}" alt="{{ p.title | escape }}" width="700" height="700">
+        {% else %}
+          <div class="product-card__placeholder product-card__placeholder--lg">GLOW</div>
+        {% endif %}
+      </div>
+      {% if p.images.size > 1 %}
+        <div class="sph-thumbs">
+          {% for image in p.images limit: 6 %}
+            <button type="button" class="thumb{% if forloop.first %} is-active{% endif %}" data-src="{{ image | image_url: width: 1200 }}" onclick="document.getElementById('SphMain').src=this.dataset.src;this.parentNode.querySelectorAll('.thumb').forEach(t=>t.classList.remove('is-active'));this.classList.add('is-active');">
+              <img src="{{ image | image_url: width: 160 }}" alt="" loading="lazy" width="64" height="64">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="sph-buy">
+      <p class="sph-badge">{{ section.settings.badge }}</p>
+      <h1 class="sph-title">{% if p %}{{ p.title }}{% else %}{{ section.settings.fallback_title }}{% endif %}</h1>
+
+      <div class="sph-stars">★★★★★ <span>4.9 · 128 отзывов</span></div>
+
+      {% if p %}
+        <div class="sph-price">
+          {% if v.compare_at_price > v.price %}
+            <span class="sph-old">{{ v.compare_at_price | money }}</span>
+            <span class="sph-save">−{{ v.compare_at_price | minus: v.price | times: 100.0 | divided_by: v.compare_at_price | round }}%</span>
+          {% endif %}
+          <span class="sph-now">{{ v.price | money }}</span>
+        </div>
+
+        {% unless p.has_only_default_variant %}
+          <p class="label">Модель</p>
+          <div class="option-list">
+            {% for variant in p.variants %}
+              <button type="button" class="option-pill{% if variant.id == v.id %} is-active{% endif %}" data-id="{{ variant.id }}" data-price="{{ variant.price | money }}" onclick="document.getElementById('SphVariantId').value=this.dataset.id;document.getElementById('SphPriceNow').textContent=this.dataset.price;document.getElementById('SphBtnPrice').textContent=this.dataset.price;this.parentNode.querySelectorAll('.option-pill').forEach(t=>t.classList.remove('is-active'));this.classList.add('is-active');">
+                {{ variant.title }}
+              </button>
+            {% endfor %}
+          </div>
+        {% endunless %}
+
+        <form method="post" action="/cart/add" accept-charset="UTF-8" class="sph-form">
+          <input type="hidden" name="form_type" value="product">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="id" id="SphVariantId" value="{{ v.id }}">
+          <button type="submit" class="btn btn--primary btn--full btn--pulse" {% unless v.available %}disabled{% endunless %}>
+            {% if v.available %}
+              Купить сейчас · <span id="SphBtnPrice">{{ v.price | money }}</span>
+            {% else %}
+              Нет в наличии
+            {% endif %}
+          </button>
+        </form>
+      {% else %}
+        <a class="btn btn--primary btn--full" href="/collections/all">Смотреть товар</a>
+      {% endif %}
+
+      <ul class="sph-trust">
+        <li>✓ Доставка по РФ 5–14 дней</li>
+        <li>✓ Оплата при получении / онлайн</li>
+        <li>✓ {{ section.settings.guarantee }}</li>
+      </ul>
+
+      <div class="sph-benefits">
+        <div class="sph-benefit"><span>✦</span> Светится после зарядки светом</div>
+        <div class="sph-benefit"><span>◎</span> Мягкий силикон, точная посадка</div>
+        <div class="sph-benefit"><span>★</span> Защита от царапин и ударов</div>
+        <div class="sph-benefit"><span>☾</span> Эффект виден всю ночь</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sph-reviews">
+  <h2 class="section-title">{{ section.settings.reviews_title }}</h2>
+  <div class="sph-reviews-grid">
+    <article class="rev-card">
+      <p class="rev-stars">★★★★★</p>
+      <p class="rev-text">Чехол реально светится! Зарядила под лампой 3 минуты — в темноте видно отлично. На Pro 2 сел идеально.</p>
+      <p class="rev-author">Анна К. · Verified</p>
+    </article>
+    <article class="rev-card">
+      <p class="rev-stars">★★★★★</p>
+      <p class="rev-text">Качество приятное, силикон мягкий. Свечение держится долго, если хорошо «зарядить». Рекомендую.</p>
+      <p class="rev-author">Дмитрий С. · Verified</p>
+    </article>
+    <article class="rev-card">
+      <p class="rev-stars">★★★★☆</p>
+      <p class="rev-text">Пришёл быстро, светится как на фото. Для ночи хватает. Беру ещё друзьям.</p>
+      <p class="rev-author">Елена М. · Verified</p>
+    </article>
+    <article class="rev-card">
+      <p class="rev-stars">★★★★★</p>
+      <p class="rev-text">Подарок брату — в восторге. Ночью в комнате прямо подсветка. За эти деньги топ.</p>
+      <p class="rev-author">Игорь П. · Verified</p>
+    </article>
+  </div>
+</section>
+
+<section class="sph-how">
+  <h2 class="section-title">Как пользоваться</h2>
+  <div class="sph-steps">
+    <div class="sph-step"><span>1</span><p>Наденьте чехол на AirPods</p></div>
+    <div class="sph-step"><span>2</span><p>Подержите 1–5 мин под ярким светом</p></div>
+    <div class="sph-step"><span>3</span><p>Выключите свет — чехол загорится</p></div>
+  </div>
+</section>
+
+{% if p %}
+<section class="sph-sticky" id="SphSticky">
+  <div class="sph-sticky__inner">
+    <div>
+      <strong>{{ p.title | truncate: 40 }}</strong>
+      <span id="SphPriceNow">{{ v.price | money }}</span>
+    </div>
+    <form method="post" action="/cart/add">
+      <input type="hidden" name="id" value="{{ v.id }}">
+      <button type="submit" class="btn btn--primary">Купить</button>
+    </form>
+  </div>
+</section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Single product home",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "badge", "label": "Badge", "default": "ХИТ · Светится в темноте" },
+    { "type": "text", "id": "urgency", "label": "Urgency bar", "default": "🔥 Осталось мало по этой цене · отправка сегодня" },
+    { "type": "text", "id": "guarantee", "label": "Guarantee", "default": "14 дней на обмен/возврат" },
+    { "type": "text", "id": "reviews_title", "label": "Reviews title", "default": "Что говорят покупатели" },
+    { "type": "text", "id": "fallback_title", "label": "Fallback title", "default": "Светящийся чехол для AirPods" }
+  ],
+  "presets": [{ "name": "Single product home" }]
+}
+{% endschema %}
