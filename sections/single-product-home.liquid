@@ -1,4 +1,4 @@
-{% comment %} One-product CRO homepage {% endcomment %}
+{% comment %} One-product CRO homepage — always sellable (dropship) {% endcomment %}
 {% assign p = all_products[section.settings.product] %}
 {% if p == blank %}
   {% assign p = collections.frontpage.products.first %}
@@ -7,6 +7,9 @@
   {% assign p = collections.all.products.first %}
 {% endif %}
 {% assign v = p.selected_or_first_available_variant %}
+{% if v == blank and p %}
+  {% assign v = p.variants.first %}
+{% endif %}
 
 <section class="sph" id="SphRoot" {% if p %}data-product-id="{{ p.id }}"{% endif %}>
   {% if section.settings.urgency != blank %}
@@ -38,7 +41,7 @@
       <h1 class="sph-title">{% if p %}{{ p.title }}{% else %}{{ section.settings.fallback_title }}{% endif %}</h1>
       <div class="sph-stars">★★★★★ <span>4.9 · 128 отзывов</span></div>
 
-      {% if p %}
+      {% if p and v %}
         <div class="sph-price">
           {% if v.compare_at_price > v.price %}
             <span class="sph-old" id="SphOld">{{ v.compare_at_price | money_without_currency | strip }} ₽</span>
@@ -51,7 +54,7 @@
             <p class="label">{{ option.name }}</p>
             <div class="option-list" data-option-index="{{ forloop.index0 }}">
               {% for value in option.values %}
-                <button type="button" class="option-pill{% if option.selected_value == value %} is-active{% endif %}" data-option-index="{{ forloop.parentloop.index0 }}" data-value="{{ value | escape }}">{{ value }}</button>
+                <button type="button" class="option-pill{% if option.selected_value == value or forloop.first and option.selected_value == blank %} is-active{% endif %}" data-value="{{ value | escape }}">{{ value }}</button>
               {% endfor %}
             </div>
           {% endfor %}
@@ -61,12 +64,8 @@
           <input type="hidden" name="form_type" value="product">
           <input type="hidden" name="utf8" value="✓">
           <input type="hidden" name="id" id="SphVariantId" value="{{ v.id }}">
-          <button type="submit" class="btn btn--primary btn--full btn--pulse" id="SphBuyBtn" {% unless v.available %}disabled{% endunless %}>
-            {% if v.available %}
-              Купить сейчас · <span id="SphBtnPrice">{{ v.price | money_without_currency | strip }} ₽</span>
-            {% else %}
-              Нет в наличии
-            {% endif %}
+          <button type="submit" class="btn btn--primary btn--full btn--pulse" id="SphBuyBtn">
+            Купить сейчас · <span id="SphBtnPrice">{{ v.price | money_without_currency | strip }} ₽</span>
           </button>
         </form>
 
@@ -126,7 +125,7 @@
   </div>
 </section>
 
-{% if p %}
+{% if p and v %}
 <section class="sph-sticky" id="SphSticky">
   <div class="sph-sticky__inner">
     <div>
@@ -165,7 +164,7 @@
     return variants.find(function (v) {
       if (!v.options) return false;
       return v.options.every(function (o, i) { return String(o) === String(opts[i]); });
-    });
+    }) || variants[0];
   }
   function applyVariant(v) {
     if (!v) return;
@@ -182,13 +181,8 @@
     if (priceNow) priceNow.textContent = priceText;
     if (priceMain) priceMain.textContent = priceText;
     if (buyBtn) {
-      if (v.available === false) {
-        buyBtn.disabled = true;
-        buyBtn.textContent = 'Нет в наличии';
-      } else {
-        buyBtn.disabled = false;
-        buyBtn.innerHTML = 'Купить сейчас · <span id="SphBtnPrice">' + priceText + '</span>';
-      }
+      buyBtn.disabled = false;
+      buyBtn.innerHTML = 'Купить сейчас · <span id="SphBtnPrice">' + priceText + '</span>';
     }
   }
   document.querySelectorAll('.option-pill').forEach(function (btn) {
@@ -208,6 +202,8 @@
       btn.classList.add('is-active');
     });
   });
+  // force enable on load
+  applyVariant(findVariant(selectedOptions()) || variants[0]);
 })();
 </script>
 
